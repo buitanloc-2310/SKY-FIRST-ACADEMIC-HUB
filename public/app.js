@@ -57,5 +57,76 @@ async function adminAction(action,btn){activeAdmin(btn);const p=$('#adminPanel')
 function auditTable(items){return `<div class="table-wrap"><table class="data-table"><thead><tr><th>Thời gian</th><th>Hành động</th><th>Đối tượng</th><th>ID</th></tr></thead><tbody>${items.map(x=>`<tr><td>${esc(x.created_at)}</td><td>${esc(x.action)}</td><td>${esc(x.entity_type)}</td><td>${esc(x.entity_id||'')}</td></tr>`).join('')}</tbody></table></div>`}
 
 function navSetup(){const toggle=$('#navToggle'),nav=$('#mainNav');toggle.onclick=()=>{const on=nav.classList.toggle('open');toggle.setAttribute('aria-expanded',on?'true':'false')};$$('.nav-group>button').forEach(b=>b.onclick=e=>{if(innerWidth<=1080){e.preventDefault();b.parentElement.classList.toggle('open')}});document.addEventListener('click',e=>{if(innerWidth>1080&&!e.target.closest('.nav-group'))$$('.nav-group').forEach(g=>g.classList.remove('open'))})}
-async function route(){const p=location.pathname.replace(/\/+$/,'')||'/';try{if(p==='/')return home();if(pageMap[p]){const [t,d,c,s]=pageMap[p];return listing(t,d,{category:c,scope:s})}if(p==='/library')return library();if(p==='/fields')return fields();if(p.startsWith('/field/'))return field(decodeURIComponent(p.slice(7)));if(p==='/units')return units();if(p.startsWith('/unit/'))return unit(decodeURIComponent(p.slice(6)));if(p==='/collections')return collections();if(p==='/search')return searchPage();if(p==='/document-code')return codeLookup();if(p==='/versions')return versionsLookup();if(p.startsWith('/document/'))return documentPage(decodeURIComponent(p.slice(10)));if(staticPages[p])return staticPage(p);if(p==='/admin'||p==='/admin/login')return admin();title('Không tìm thấy');setMain(`${pageHero('Không tìm thấy trang')}<section class="section"><div class="container">${empty('Đường dẫn không tồn tại hoặc đã được thay đổi.')}</div></section>`)}catch(e){console.error(e);setMain(`${pageHero('Không thể tải nội dung')}<section class="section"><div class="container">${empty('Hệ thống gặp lỗi khi tải nội dung. Vui lòng thử lại sau.')}</div></section>`)}}
-navSetup();route();
+async function route(){
+  const p=location.pathname.replace(/\/+$/,'')||'/';
+
+  try{
+
+    if(p==='/admin'||p==='/admin/login'){
+      return admin();
+    }
+
+    if(p==='/'){
+      return home();
+    }
+
+    if(pageMap[p]){
+      const [t,d,c,s]=pageMap[p];
+      return listing(t,d,{category:c,scope:s});
+    }
+
+    if(p==='/library')return library();
+    if(p==='/fields')return fields();
+
+    if(p.startsWith('/field/')){
+      return field(decodeURIComponent(p.slice(7)));
+    }
+
+    if(p==='/units')return units();
+
+    if(p.startsWith('/unit/')){
+      return unit(decodeURIComponent(p.slice(6)));
+    }
+
+    if(p==='/collections')return collections();
+    if(p==='/search')return searchPage();
+    if(p==='/document-code')return codeLookup();
+    if(p==='/versions')return versionsLookup();
+
+    if(p.startsWith('/document/')){
+      return documentPage(decodeURIComponent(p.slice(10)));
+    }
+
+    if(staticPages[p]){
+      return staticPage(p);
+    }
+
+    title('Không tìm thấy');
+
+    setMain(`
+      ${pageHero('Không tìm thấy trang')}
+      <section class="section">
+        <div class="container">
+          ${empty('Đường dẫn không tồn tại hoặc đã được thay đổi.')}
+        </div>
+      </section>
+    `);
+
+  }catch(e){
+
+    console.error(e);
+
+    setMain(`
+      ${pageHero('Không thể tải nội dung')}
+      <section class="section">
+        <div class="container">
+          ${empty('Hệ thống gặp lỗi khi tải nội dung. Vui lòng thử lại sau.')}
+        </div>
+      </section>
+    `);
+
+  }
+}
+
+navSetup();
+route();
