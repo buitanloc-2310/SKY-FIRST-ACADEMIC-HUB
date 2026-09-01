@@ -47,7 +47,7 @@ export async function authRoute(request,env,url){
   }
   // One-time bootstrap. Set BOOTSTRAP_TOKEN using `wrangler secret put BOOTSTRAP_TOKEN`, then remove/rotate it after first admin creation.
   if(url.pathname==='/api/auth/bootstrap'&&request.method==='POST'){
-    const supplied=request.headers.get('x-bootstrap-token')||''; if(!env.BOOTSTRAP_TOKEN||supplied!==env.BOOTSTRAP_TOKEN)return json({error:'NOT_AVAILABLE'},404);
+const supplied=request.headers.get('x-bootstrap-token')||''; if(!env.BOOTSTRAP_TOKEN_||supplied!==env.BOOTSTRAP_TOKEN_)return json({error:'NOT_AVAILABLE'},404);
     const count=await env.DB.prepare('SELECT COUNT(*) AS c FROM admins').first();if(Number(count?.c||0)>0)return json({error:'ALREADY_BOOTSTRAPPED'},409);
     const b=await bodyJson(request),email=clean(b?.email,254).toLowerCase(),name=clean(b?.full_name,120),password=String(b?.password||'');
     if(!isEmail(email)||name.length<2||password.length<14)return json({error:'INVALID_INPUT'},400);
