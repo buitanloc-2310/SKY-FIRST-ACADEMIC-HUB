@@ -9,7 +9,18 @@ function secure(resp){
   return new Response(resp.body,{status:resp.status,statusText:resp.statusText,headers:h});
 }
 async function handle(request,env){const url=new URL(request.url);
-  if(isStateChanging(request)&&url.pathname.startsWith('/api/')){if(!sameOrigin(request,env.APP_URL||url.origin)&&url.pathname!=='/api/auth/bootstrap')return json({error:'BAD_ORIGIN'},403);}
+if(isStateChanging(request) && url.pathname.startsWith('/api/')){
+  const validCurrentOrigin = sameOrigin(request, url.origin);
+  const validAppOrigin = env.APP_URL ? sameOrigin(request, env.APP_URL) : false;
+
+  if(
+    !validCurrentOrigin &&
+    !validAppOrigin &&
+    url.pathname !== '/api/auth/bootstrap'
+  ){
+    return json({error:'BAD_ORIGIN'},403);
+  }
+}
   if(url.pathname==='/api/health')return json({ok:true,app:'Sky First Academic Hub',instance_id:env.INSTANCE_ID||'bc5bc5f5-b089-4102-a812-3b2666a802af',time:new Date().toISOString(),database:!!env.DB,storage:!!env.FILES});
   let r=await authRoute(request,env,url);if(r)return r;r=await publicRoute(request,env,url);if(r)return r;r=await adminRoute(request,env,url);if(r)return r;
   const asset=await env.ASSETS.fetch(request);if(asset.status!==404)return asset;
