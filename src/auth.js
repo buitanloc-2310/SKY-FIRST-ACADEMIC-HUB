@@ -1,6 +1,6 @@
 import {json,bodyJson,clean,isEmail,randomToken,sha256Hex,parseCookie} from './utils.js';
 const COOKIE='sfn_academic_session';
-const ITER=210000;
+const ITER=100000;
 
 function bytesHex(bytes){return [...bytes].map(x=>x.toString(16).padStart(2,'0')).join('');}
 function hexBytes(hex){const a=new Uint8Array(hex.length/2);for(let i=0;i<a.length;i++)a[i]=parseInt(hex.slice(i*2,i*2+2),16);return a;}
