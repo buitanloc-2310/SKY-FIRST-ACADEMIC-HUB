@@ -1,0 +1,22 @@
+{
+  "$schema": "./node_modules/wrangler/config-schema.json",
+  "name": "skyfirst-academic-hub",
+  "main": "src/index.js",
+  "compatibility_date": "2026-08-21",
+  "assets": { "directory": "./public", "binding": "ASSETS" },
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "skyfirst-academic-db",
+      "database_id": "REPLACE_WITH_YOUR_D1_DATABASE_ID"
+    }
+  ],
+  "r2_buckets": [
+    { "binding": "FILES", "bucket_name": "skyfirst-academic-files" }
+  ],
+  "vars": {
+    "APP_URL": "https://academic.skyfirst.io.vn",
+    "INSTANCE_ID": "bc5bc5f5-b089-4102-a812-3b2666a802af",
+    "TURNSTILE_SITE_KEY": ""
+  }
+}
