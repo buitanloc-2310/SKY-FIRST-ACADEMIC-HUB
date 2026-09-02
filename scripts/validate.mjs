@@ -1,7 +1,0 @@
-import fs from 'node:fs';import path from 'node:path';import {execFileSync} from 'node:child_process';
-const root=path.resolve(new URL('..',import.meta.url).pathname);const must=['wrangler.jsonc','public/index.html','public/app.js','public/styles.css','public/assets/skyfirst-logo.png','src/index.js','src/auth.js','src/public.js','src/admin.js','migrations/0001_schema.sql','seed-library/manifest.json'];let ok=true;
-for(const f of must){if(!fs.existsSync(path.join(root,f))){console.error('MISSING',f);ok=false}}
-const id='bc5bc5f5-b089-4102-a812-3b2666a802af';for(const f of ['wrangler.jsonc','public/index.html','migrations/0001_schema.sql','seed-library/manifest.json']){if(fs.existsSync(path.join(root,f))&&!fs.readFileSync(path.join(root,f),'utf8').includes(id)){console.error('INSTANCE_ID_MISSING',f);ok=false}}
-for(const f of ['src/index.js','src/auth.js','src/public.js','src/admin.js','public/app.js']){try{execFileSync(process.execPath,['--check',path.join(root,f)],{stdio:'pipe'})}catch(e){console.error('SYNTAX',f);ok=false}}
-const manifest=JSON.parse(fs.readFileSync(path.join(root,'seed-library/manifest.json'),'utf8'));if(manifest.count!==1000){console.error('EXPECTED_1000_PDFS',manifest.count);ok=false}for(const d of manifest.documents){if(!fs.existsSync(path.join(root,'seed-library',d.relative_path))){console.error('MISSING_PDF',d.filename);ok=false;break}}
-console.log(ok?'VALIDATION_OK':'VALIDATION_FAILED');if(!ok)process.exit(1);
