@@ -1,0 +1,17 @@
+{
+  "name": "skyfirst-academic-hub",
+  "version": "1.2.0",
+  "private": true,
+  "type": "module",
+  "description": "Sky First Academic Hub - Cổng Học liệu & Học thuật của Mạng lưới Giáo dục & Phát triển Cộng đồng Sky First (SFN)",
+  "scripts": {
+    "dev": "wrangler dev --remote",
+    "deploy": "wrangler deploy",
+    "db:migrate": "wrangler d1 migrations apply DB --remote",
+    "db:migrate:local": "wrangler d1 migrations apply DB --local",
+    "validate": "node scripts/validate.mjs"
+  },
+  "devDependencies": {
+    "wrangler": "^4.30.0"
+  }
+}
